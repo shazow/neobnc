@@ -2,7 +2,7 @@
 
 Multi-tenant IRC bouncer (BNC), written in Go.
 
-**Status**: Just this readme. :P
+**Status**: Just some boilerplate, nothing worth running.
 
 ## Goals
 
@@ -11,7 +11,7 @@ Multi-tenant IRC bouncer (BNC), written in Go.
 * v3: Built-in client (web? ssh?)
 * v4+: focus more on web client, with drag-n-drop image uploads and whatnot.
 
-##References
+## References
 
 Related projects which we might use or refer to while implementing our BNC.
 
