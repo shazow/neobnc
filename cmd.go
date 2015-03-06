@@ -9,7 +9,7 @@ import (
 
 	"github.com/alexcesaro/log"
 	"github.com/alexcesaro/log/golog"
-	"github.com/conformal/go-flags"
+	"github.com/jessevdk/go-flags"
 )
 import _ "net/http/pprof"
 
@@ -18,7 +18,7 @@ var version string = "dev"
 
 // Options contains the flag options
 type Options struct {
-	Bind    string `long:"bind" description:"Host and port to listen on." default:"0.0.0.0:6697"`
+	Bind    string `long:"bind" description:"Host and port to listen on." default:"0.0.0.0:6667"`
 	Pprof   int    `long:"pprof" description:"Enable pprof http server for profiling."`
 	Verbose []bool `short:"v" long:"verbose" description:"Show verbose logging."`
 	Version bool   `long:"version"`
@@ -64,16 +64,16 @@ func main() {
 	logLevel := logLevels[numVerbose]
 	SetLogger(golog.New(os.Stderr, logLevel))
 
-	host, err := net.Listen("tcp", options.Bind)
+	socket, err := net.Listen("tcp", options.Bind)
 	if err != nil {
 		fail(4, "Failed to listen on socket: %v\n", err)
 	}
-	defer host.Close()
+	defer socket.Close()
 
-	s := &Server{}
-	s.Start(host)
+	h := NewHost()
+	go h.Start(socket)
 
-	fmt.Printf("Listening for connections on %v\n", host.Addr().String())
+	fmt.Printf("Listening for connections on %v\n", socket.Addr().String())
 
 	// Construct interrupt handler
 	sig := make(chan os.Signal, 1)
