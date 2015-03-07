@@ -1,4 +1,5 @@
 BINARY = neobnc
+BIND = "localhost:6668"
 
 all: $(BINARY)
 
@@ -6,7 +7,7 @@ $(BINARY): *.go
 	go build -ldflags "-X main.version `git describe --long --tags --dirty --always`" .
 
 deps:
-	go get .
+	go get ./...
 
 build: $(BINARY)
 
@@ -14,7 +15,7 @@ clean:
 	rm $(BINARY)
 
 run: $(BINARY)
-	./$(BINARY) -vv
+	./$(BINARY) --bind $(BIND) -vv
 
 debug: $(BINARY)
 	./$(BINARY) --pprof 6060 -vv
