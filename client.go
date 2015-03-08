@@ -24,7 +24,7 @@ type Client struct {
 // NewClient returns a new Client
 func NewClient(conn net.Conn) (*Client, error) {
 	// XXX: Debugging here
-	conn = LogConn(conn)
+	//conn = LogConn(conn)
 
 	return &Client{
 		Conn:    conn,

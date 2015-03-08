@@ -2,7 +2,7 @@
 
 Multi-tenant IRC bouncer (BNC), written in Go.
 
-**Status**: Just some boilerplate, nothing worth running.
+**Status**: Everything is hard-coded but it barely-works?
 
 ## Goals
 
