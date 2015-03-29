@@ -7,7 +7,7 @@ Multi-tenant IRC bouncer (BNC), written in Go.
 ## Goals
 
 * v1: Multi-user, low resource usage (target self-hosting on Raspberry Pi).
-* v2: Out-of-band notifications (email? pushover?)
+* v2: Out-of-band notifications (email? pushover?), listen on multiple IPs (load balance for multi tenants).
 * v3: Built-in client (web? ssh?)
 * v4+: focus more on web client, with drag-n-drop image uploads and whatnot.
 
