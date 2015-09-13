@@ -1,15 +1,25 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
 	"github.com/sorcix/irc"
 )
 
+const ServerName = "neobnc"
+
+type User struct {
+	Nick string
+	User string
+	Host string
+	Name string
+}
+
 type Relay struct {
 	sync.Mutex
-	Nick string
+	user User
 	// TODO: Handle many clients
 	connected *Client
 	// TODO: Handle many servers
@@ -18,23 +28,33 @@ type Relay struct {
 }
 
 func (r *Relay) Join(c *Client) error {
+	message, err := c.DecodeWhen(irc.NICK)
+	if err != nil {
+		return err
+	}
+	u := User{}
+	u.Nick = message.Params[0]
+
+	message, err = c.DecodeWhen(irc.USER)
+	if err != nil {
+		return err
+	}
+	u.User = message.Params[0]
+	u.Name = message.Trailing
+
 	r.Lock()
 	defer r.Unlock()
 
+	r.user = u
 	r.connected = c
-	logger.Info("Successfully joined.")
+	logger.Infof("Client joined: %s", r.prefix)
 
-	// TODO: Unhardcode all of this:
-
-	r.prefix = &irc.Prefix{
-		Name: "name",
-		User: "user",
-		Host: "host",
-	}
-	err := c.Encode(&irc.Message{
-		Prefix:  r.prefix,
-		Command: irc.RPL_WELCOME,
-		Params:  []string{r.prefix.User, "Welcome!"},
+	r.prefix = &irc.Prefix{Name: ServerName}
+	err = c.Encode(&irc.Message{
+		Prefix:   r.prefix,
+		Command:  irc.RPL_WELCOME,
+		Params:   []string{u.User},
+		Trailing: fmt.Sprintf("Welcome!"),
 	})
 	if err != nil {
 		return err
@@ -58,7 +78,6 @@ func (r *Relay) Join(c *Client) error {
 				logger.Error("Client decode error:", err)
 				return
 			}
-			logger.Debugf("Client: %s", msg)
 			if r.server == nil {
 				// Skip relay
 				// TODO: Buffer these to relay later? Or some subset of commands?
@@ -86,12 +105,12 @@ func (r *Relay) Connect(addr string) error {
 
 	conn.Encode(&irc.Message{
 		Command:  irc.USER,
-		Params:   []string{r.Nick, "0", "*"},
-		Trailing: r.Nick,
+		Params:   []string{r.user.Nick, "0", "*"},
+		Trailing: r.user.Name,
 	})
 	conn.Encode(&irc.Message{
 		Command: irc.NICK,
-		Params:  []string{r.Nick},
+		Params:  []string{r.user.Nick},
 	})
 
 	go func() {

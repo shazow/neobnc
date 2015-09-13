@@ -2,7 +2,7 @@
 
 Multi-tenant IRC bouncer (BNC), written in Go.
 
-**Status**: Everything is hard-coded but it barely-works?
+**Status**: Everything is hard-coded but it barely-works? Don't use it yet.
 
 ## Goals
 
@@ -32,15 +32,15 @@ Basic protocol draft:
 
 ```
 ->  PASS bar
-->  NICK foo
-->  USER foo localhost remotehost :real name
-<-  :remotehost NOTICE * :Connecting...
-<-  :remotehost 001 foo :Welcome to neobnc
-<-  :remotehost 002 foo :Your host is <servername>, running version <version>
-<-  :remotehost 003 foo :This server was created <date>
-<-  :remotehost 004 foo remotehost <version> <available user modes> <available channel modes>
-<-  PING :remotehost
-->  PONG remotehost
+->  NICK {nick}
+->  USER {user} {host} {remotehost} :{realname}
+<-  :{remotehost} NOTICE * :Connecting...
+<-  :{remotehost} 001 {user} :Welcome to neobnc. {nick}!{user}@{host}
+<-  :{remotehost} 002 {user} :Your host is {servername}, running version {version}
+<-  :{remotehost} 003 {user} :This server was created {date}
+<-  :{remotehost} 004 {user} {remotehost} {version} {available user modes} {available channel modes}
+<-  PING :{remotehost}
+->  PONG {remotehost}
 ```
 
 ## License
