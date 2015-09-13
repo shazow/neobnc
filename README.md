@@ -21,6 +21,28 @@ Related projects which we might use or refer to while implementing our BNC.
 * IRC Protocol
   * https://github.com/sorcix/irc
   * https://github.com/fluffle/goirc
+  * https://github.com/edmund-huber/ergonomadic
 * Other
   * https://github.com/lukevers/kittens IRC Bot with a swanky web UI.
   * https://www.irccloud.com/ BNC service with web-based UI.
+
+## Notes
+
+Basic protocol draft:
+
+```
+->  PASS bar
+->  NICK foo
+->  USER foo localhost remotehost :real name
+<-  :remotehost NOTICE * :Connecting...
+<-  :remotehost 001 foo :Welcome to neobnc
+<-  :remotehost 002 foo :Your host is <servername>, running version <version>
+<-  :remotehost 003 foo :This server was created <date>
+<-  :remotehost 004 foo remotehost <version> <available user modes> <available channel modes>
+<-  PING :remotehost
+->  PONG remotehost
+```
+
+## License
+
+MIT.
