@@ -4,7 +4,7 @@ BIND = "localhost:6668"
 all: $(BINARY)
 
 $(BINARY): *.go
-	go build -ldflags "-X main.version `git describe --long --tags --dirty --always`" .
+	go build -ldflags "-X main.version=`git describe --long --tags --dirty --always`" .
 
 deps:
 	go get ./...

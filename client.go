@@ -23,9 +23,6 @@ type Client struct {
 
 // NewClient returns a new Client
 func NewClient(conn net.Conn) (*Client, error) {
-	// XXX: Debugging here
-	//conn = LogConn(conn)
-
 	return &Client{
 		Conn:    conn,
 		Encoder: irc.NewEncoder(conn),
@@ -94,6 +91,9 @@ func (c *Client) DecodeWhen(command string) (*irc.Message, error) {
 		message, err := c.Decoder.Decode()
 		if err != nil {
 			return nil, err
+		}
+		if message == nil {
+			continue
 		}
 		if message.Command == command {
 			return message, nil

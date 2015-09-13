@@ -42,7 +42,7 @@ func (r *Relay) Join(c *Client) error {
 
 	if r.server == nil {
 		// XXX: Unhardcode this
-		r.Connect("localhost:6667")
+		//r.Connect("localhost:6667")
 	}
 
 	go func() {
@@ -59,7 +59,10 @@ func (r *Relay) Join(c *Client) error {
 				return
 			}
 			logger.Debugf("Client: %s", msg)
-			if err = r.server.Encode(msg); err != nil {
+			if r.server == nil {
+				// Skip relay
+				// TODO: Buffer these to relay later? Or some subset of commands?
+			} else if err = r.server.Encode(msg); err != nil {
 				logger.Error("Client encode error:", err)
 				return
 			}

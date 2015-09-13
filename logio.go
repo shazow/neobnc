@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
 	"net"
 )
 
@@ -10,12 +10,12 @@ type logConn struct {
 }
 
 func (conn *logConn) Read(p []byte) (n int, err error) {
-	fmt.Printf("<- %s", p)
+	logger.Debugf("<- %+q", bytes.Trim(p, "\x00"))
 	return conn.Conn.Read(p)
 }
 
 func (conn *logConn) Write(p []byte) (n int, err error) {
-	fmt.Printf("-> %s", p)
+	logger.Debugf("-> %+q", bytes.Trim(p, "\x00"))
 	return conn.Conn.Write(p)
 }
 

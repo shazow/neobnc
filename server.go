@@ -13,6 +13,7 @@ var ErrInvalidRelayKey = errors.New("invalid relay key")
 type Host struct {
 	sync.Mutex
 	relays map[string]*Relay
+	Debug  bool
 }
 
 func NewHost() *Host {
@@ -29,6 +30,10 @@ func (h Host) Start(l net.Listener) error {
 		if err != nil {
 			logger.Errorf("Failed to accept connection: %v", err)
 			return err
+		}
+
+		if h.Debug {
+			conn = LogConn(conn)
 		}
 
 		// Goroutineify to resume accepting sockets early

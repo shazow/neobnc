@@ -71,6 +71,7 @@ func main() {
 	defer socket.Close()
 
 	h := NewHost()
+	h.Debug = logLevel == log.Debug
 	go h.Start(socket)
 
 	fmt.Printf("Listening for connections on %v\n", socket.Addr().String())
